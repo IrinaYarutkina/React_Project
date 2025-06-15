@@ -1,7 +1,7 @@
 function Footer(){
     return (
         <footer> 
-            <p> Слова подготовлены </p>
+            <p> © 2025 Словарь </p>
         </footer>
     )
 }
