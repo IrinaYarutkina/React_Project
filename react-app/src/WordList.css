@@ -1,13 +1,13 @@
 .word-list {
-    background-color: #FFFAC4; /* фон страницы */
+    background-color: #FFFAC4; 
     padding: 40px;
     font-family: Arial, sans-serif;
-    color: #333333; /* основной текст */
+    color: #333333; 
     min-height: 100vh;
 }
 
 .word-list h2 {
-    color: #FF8BCB; /* основной акцент */
+    color: #FF8BCB; 
     font-size: 28px;
     margin-bottom: 20px;
 }
@@ -21,7 +21,7 @@
 .word-list li {
     padding: 15px;
     margin-bottom: 12px;
-    border: 1px solid #E0E0E0; /* граница */
+    border: 1px solid #E0E0E0; 
     border-radius: 12px;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -48,4 +48,46 @@
 
 .word-list a:hover {
     background-color: #e06fad;
+}
+.word-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.word-list th,
+.word-list td {
+    border: 1px solid #FF8BCB;
+    padding: 8px;
+}
+.word-list th {
+    background-color: #FF8BCB;
+    text-align: center;
+    color: #ffffff;
+}
+.word-list-button {
+    background-color: #FF8BCB;
+    color: #ffffff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background-color 0.3s;
+}
+
+.word-list-button:hover {
+    background-color: #e573b0;
+}
+
+.word-list-button-delete{
+    background-color: #fdf6a6;
+    color: #333333;
+    padding: 8px 16px;
+    border-color: #e573b0;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background-color 0.3s;
 }

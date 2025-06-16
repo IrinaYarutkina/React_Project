@@ -1,30 +1,99 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../WordList.css'; 
+import '../WordList.css';
 
-const words = [
-{ id: 1, word: 'apple', translation: 'яблоко' },
-{ id: 2, word: 'book', translation: 'книга' },
-{ id: 3, word: 'sun', translation: 'солнце' },
+const initialWords = [
+    { id: 1, word: 'apple', translation: 'яблоко' },
+    { id: 2, word: 'book', translation: 'книга' },
+    { id: 3, word: 'sun', translation: 'солнце' },
 ];
 
 function WordList() {
+    const [words, setWords] = useState(initialWords);
+    const [editingId, setEditingId] = useState(null);
+    const [editedWord, setEditedWord] = useState({ word: '', translation: '' });
+
+    const startEditing = (word) => {
+    setEditingId(word.id);
+    setEditedWord({ word: word.word, translation: word.translation });
+    };
+
+    const cancelEditing = () => {
+    setEditingId(null);
+    setEditedWord({ word: '', translation: '' });
+    };
+
+    const saveEditing = (id) => {
+    setWords(words.map(w => w.id === id ? { ...w, ...editedWord } : w));
+    cancelEditing();
+    };
+
+    const deleteWord = (id) => {
+    setWords(words.filter(w => w.id !== id));
+    };
+
     return (
-        <div className="word-list">
-            <h2>Список слов</h2>
-            <ul>
-                {words.map((word) => (
-                    <li key={word.id}>
-                        <strong>{word.word}</strong> — {word.translation}
-                        {/* Ссылка */}
-                        <Link to="/card" style={{ marginLeft: '10px' }}>
-                Перейти к карточке
-                        </Link>
-                    </li>
-        ))}
-            </ul>
-        </div>
-    );
+    <div className="word-list">
+        <h2>Список слов</h2>
+        <table>
+        <thead>
+            <tr>
+            <th>Слово</th>
+            <th>Перевод</th>
+            <th>Карточка</th>
+            <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {words.map((word) => (
+            <tr key={word.id}>
+                {editingId === word.id ? (
+                <>
+                    <td>
+                    <input
+                        type="text"
+                        value={editedWord.word}
+                        onChange={(e) =>
+                        setEditedWord({ ...editedWord, word: e.target.value })
+                        }
+                    />
+                    </td>
+                    <td>
+                    <input
+                        type="text"
+                        value={editedWord.translation}
+                        onChange={(e) =>
+                        setEditedWord({ ...editedWord, translation: e.target.value })
+                        }
+                    />
+                    </td>
+                    <td>
+                        <Link to={`/card/${word.id}`}>Перейти</Link>
+                    </td>
+                    <td>
+                    <button onClick={() => saveEditing(word.id)}>Сохранить</button>
+                    <button onClick={cancelEditing}>Отмена</button>
+                    </td>
+                </>
+                ) : (
+                <>
+                    <td><strong>{word.word}</strong></td>
+                    <td>{word.translation}</td>
+                    <td>
+                    <Link to={`/card/${word.id}`}>Перейти</Link>
+                    </td>
+                    <td>
+                        <button className="word-list-button" onClick={() => startEditing(word)}> Редактировать </button>
+                        <button className="word-list-button-delete" onClick={() => deleteWord(word.id)}> Удалить </button>
+                    </td>
+                </>
+                )}
+            </tr>
+            ))}
+        </tbody>
+        </table>
+    </div>
+);
 }
 
 export default WordList;
