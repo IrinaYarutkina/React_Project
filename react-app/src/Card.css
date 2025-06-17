@@ -1,0 +1,47 @@
+/* Контейнер карточки */
+.word-card {
+    max-width: 300px;
+    min-height: 400px;
+    margin: 40px auto;
+    background-color: #FFFAC4;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: sans-serif;
+  }
+  
+  /* Слово на английском */
+  .word-card .english-word {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Перевод */
+  .word-card .translation {
+    font-size: 22px;
+    color: #444;
+    margin-top: 20px;
+  }
+  
+  /* Кнопки */
+  .word-list-button {
+    background-color: #FF8BCB;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+  
+  .word-list-button:hover {
+    background-color: #e473b2;
+  }
+  

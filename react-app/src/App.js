@@ -11,11 +11,10 @@ function App() {
       <div className="App">
         <Header />
         <Routes>
+          <Route path="/" element={<WordList />} />         {/* ← добавь это */}
           <Route path="/words" element={<WordList />} />
-          <Route path="/card" element={<Card />} />
-          {/* можно и стартовую страницу */}
-          <Route path="/" element={<WordList />} />
-        </Routes>
+          <Route path="/card/:id" element={<Card />} />
+</Routes>
         <Footer />
       </div>
     </Router>
