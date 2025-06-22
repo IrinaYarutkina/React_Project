@@ -1,0 +1,35 @@
+.not-found-container {
+    text-align: center;
+    padding: 100px 20px;
+    font-family: sans-serif;
+    background-color: #FFFAC4;
+    height: 100vh;
+    color: #333;
+  }
+  
+  .not-found-container h1 {
+    font-size: 120px;
+    color: #FF8BCB;
+    margin-bottom: 20px;
+  }
+  
+  .not-found-container p {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+  
+  .back-home-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #FF8BCB;
+    color: white;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .back-home-button:hover {
+    background-color: #e473b2;
+  }
+  

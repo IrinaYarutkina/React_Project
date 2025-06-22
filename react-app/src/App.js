@@ -3,6 +3,7 @@ import Header from './Components/Header';
 import Card from './Components/Card';
 import WordList from './Components/WordList';
 import Footer from './Components/Footer';
+import NotFound from './Components/NotFound';
 import './App.css';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<WordList />} />         {/* ← добавь это */}
           <Route path="/words" element={<WordList />} />
           <Route path="/card/:id" element={<Card />} />
+          <Route path="*" element={<NotFound />} /> 
 </Routes>
         <Footer />
       </div>
