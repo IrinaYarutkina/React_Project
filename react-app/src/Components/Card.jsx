@@ -8,27 +8,34 @@ const words = [
   { id: 3, word: 'sun', translation: 'солнце' },
 ];
 
-function Card() {
+function Card({ onViewTranslation, learnedCount}) {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Преобразуем id из строки в число
+  // id из строки в число
   const currentId = parseInt(id, 10);
-
   const word = words.find(w => w.id === currentId);
-
   const [showTranslation, setShowTranslation] = useState(false);
+  const [viewed, setViewed] = useState(false);
 
   useEffect(() => {
-    // При смене слова перевод скрываем
+    // скрывается перевод при смене слова
     setShowTranslation(false);
+    setViewed(false);
   }, [id]);
 
   if (!word) {
     return <div>Слово не найдено</div>;
   }
+  const handleShowTranslation = () => {
+    if (!viewed && onViewTranslation) {
+      onViewTranslation(); // увеличиваем счётчик
+      setViewed(true);
+    }
+    setShowTranslation(true);
+  };
 
-  // Функции перехода по словам
+  // переход по словам
   const goPrev = () => {
     const prevId = currentId === words[0].id ? words[words.length - 1].id : currentId - 1;
     navigate(`/card/${prevId}`);
@@ -55,7 +62,7 @@ function Card() {
           {!showTranslation ? (
             <button
               className="word-list-button"
-              onClick={() => setShowTranslation(true)}
+              onClick={handleShowTranslation}
             >
               Показать перевод
             </button>
@@ -71,6 +78,10 @@ function Card() {
               </button>
             </>
           )}
+          {/* Счетчик */}
+          <p style={{ marginTop: '20px', fontStyle: 'italic' }}>
+            Изучено слов за тренировку: {learnedCount}
+          </p>
         </div>
       </div>
     </div>
