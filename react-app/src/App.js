@@ -29,9 +29,7 @@ function AppContent() {
         <Route
           path="/card/:id"
           element={
-            <Card
-              onViewTranslation={incrementLearnedCount}
-              learnedCount={learnedCount}
+            <Card onViewTranslation={incrementLearnedCount} learnedCount={learnedCount}
             />
           }
         />

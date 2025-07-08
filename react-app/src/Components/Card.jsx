@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../Card.css';
 
@@ -17,11 +17,16 @@ function Card({ onViewTranslation, learnedCount}) {
   const word = words.find(w => w.id === currentId);
   const [showTranslation, setShowTranslation] = useState(false);
   const [viewed, setViewed] = useState(false);
+  const showTranslationBtnRef = useRef(null); 
 
   useEffect(() => {
     // скрывается перевод при смене слова
     setShowTranslation(false);
     setViewed(false);
+    // автофокус на кнопке "показать перевод"
+    if (showTranslationBtnRef.current) {
+      showTranslationBtnRef.current.focus();
+    }
   }, [id]);
 
   if (!word) {
@@ -61,6 +66,7 @@ function Card({ onViewTranslation, learnedCount}) {
 
           {!showTranslation ? (
             <button
+            ref={showTranslationBtnRef} 
               className="word-list-button"
               onClick={handleShowTranslation}
             >
