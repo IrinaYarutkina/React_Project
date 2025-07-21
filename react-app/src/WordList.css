@@ -91,3 +91,21 @@
     margin-right: 8px;
     transition: background-color 0.3s;
 }
+
+.input-error {
+    border: 2px solid #e573b0;
+    outline: none;
+}
+
+.error-message {
+    color: #333333;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.add-button {
+    margin-bottom: 10px;
+    padding: 6px 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
