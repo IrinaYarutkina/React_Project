@@ -5,6 +5,7 @@ import Card from './Components/Card';
 import WordList from './Components/WordList';
 import Footer from './Components/Footer';
 import NotFound from './Components/NotFound';
+import { WordsProvider } from './Context/WordsContext'
 import './App.css';
 
 function AppContent() {
@@ -43,7 +44,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
+      <WordsProvider> 
+      <AppContent /> 
+      </WordsProvider>
     </Router>
   );
 }
