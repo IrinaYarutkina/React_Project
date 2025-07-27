@@ -1,23 +1,18 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { WordsContext } from '../Context/WordsContext';
+import { observer } from 'mobx-react-lite';
+import { useStores } from '../stores/StoreContext';
 import ErrorMessage from './ErrorMessage';
 import '../WordList.css';
 
-function WordList() {
-  const {
-    words,
-    loading,
-    error,
-    addWord,
-    updateWord,
-    deleteWord,
-  } = useContext(WordsContext);
+const WordList = observer(() => {
+  const { wordStore } = useStores();
+  const { words, loading, error } = wordStore;
 
   const [editingId, setEditingId] = useState(null);
-  const [editedWord, setEditedWord] = useState({ word: '', translation: '' });
+  const [editedWord, setEditedWord] = useState(emptyWord());
   const [errorMessage, setErrorMessage] = useState('');
-  const [isAddingNew, setIsAddingNew] = useState(false); 
+  const [isAddingNew, setIsAddingNew] = useState(false);
 
   function emptyWord() {
     return {
@@ -30,13 +25,8 @@ function WordList() {
   }
 
   const startEditing = (word) => {
-    setEditingId({
-      english: word.english,
-      russian: word.russian,
-      transcription: word.transcription || '',
-      tags: word.tags || '',
-      tags_json: word.tags_json || ''
-    });
+    setEditingId(word.id);
+    setEditedWord({ ...word });
     setIsAddingNew(false);
     setErrorMessage('');
   };
@@ -49,30 +39,27 @@ function WordList() {
   };
 
   const saveEditing = async (id) => {
-    const isEmpty = !editedWord.english.trim() || !editedWord.russian.trim();
-    if (isEmpty) {
+    if (!editedWord.english.trim() || !editedWord.russian.trim()) {
       setErrorMessage('❌ Пожалуйста, заполните поля "english" и "russian".');
       return;
-    } 
+    }
 
     try {
       if (isAddingNew) {
-        await addWord(editedWord);
-        console.log('✅ Новое слово добавлено:', editedWord);
+        await wordStore.addWord(editedWord);
       } else {
-        await updateWord({ ...editedWord, id });
-        console.log('✅ Слово обновлено:', editedWord);
+        await wordStore.updateWord({ ...editedWord, id });
       }
     } catch (err) {
       setErrorMessage(`Ошибка: ${err.message}`);
     }
 
     cancelEditing();
-  }; 
+  };
 
   const handleDelete = async (id) => {
     try {
-      await deleteWord(id);
+      await wordStore.deleteWord(id);
     } catch (err) {
       setErrorMessage(`Ошибка: ${err.message}`);
     }
@@ -86,7 +73,7 @@ function WordList() {
   };
 
   if (loading) return <p>Загрузка...</p>;
-  if (error) return <ErrorMessage message={error} />; 
+  if (error) return <ErrorMessage message={error} />;
 
   return (
     <div className="word-list">
@@ -106,9 +93,9 @@ function WordList() {
           </tr>
         </thead>
         <tbody>
-          {words.map((word) => ( 
+          {words.map((word) => (
             <WordRow
-            key={word.id}
+              key={word.id}
               word={word}
               isEditing={editingId === word.id}
               editedWord={editedWord}
@@ -117,24 +104,25 @@ function WordList() {
               saveEditing={saveEditing}
               deleteWord={handleDelete}
               setEditedWord={setEditedWord}
-          />
-        ))}
-        {isAddingNew && (
+            />
+          ))}
+          {isAddingNew && (
             <WordRow
-            word={{ id: null }}
-            isEditing={true}
-            editedWord={editedWord}
-            cancelEditing={cancelEditing}
-            saveEditing={saveEditing}
-            setEditedWord={setEditedWord}
-            isNew={true}
-          /> 
+              word={{ id: null }}
+              isEditing={true}
+              editedWord={editedWord}
+              cancelEditing={cancelEditing}
+              saveEditing={saveEditing}
+              setEditedWord={setEditedWord}
+              isNew={true}
+            />
           )}
         </tbody>
       </table>
     </div>
-  ); 
-} 
+  );
+});
+
 function WordRow({
   word,
   editedWord,
@@ -146,7 +134,6 @@ function WordRow({
   setEditedWord,
   isNew = false,
 }) {
-
   if (isEditing) {
     return (
       <tr>
@@ -159,7 +146,7 @@ function WordRow({
             }
             className={!editedWord.english.trim() ? 'input-error' : ''}
           />
-        </td> 
+        </td>
         <td>
           <input
             type="text"
@@ -179,12 +166,10 @@ function WordRow({
             }
           />
         </td>
+        <td>{!isNew && <Link to={`/card/${word.id}`}>Перейти</Link>}</td>
         <td>
-          {!isNew && <Link to={`/card/${word.id}`}>Перейти</Link>}
-        </td>
-        <td>
-          <button onClick={() => saveEditing(word.id)}>Сохранить</button>
-          <button onClick={cancelEditing}>Отмена</button>
+          <button className="save-word-button" onClick={() => saveEditing(word.id)}>Сохранить</button>
+          <button className="cancel-word-button" onClick={cancelEditing}>Отмена</button>
         </td>
       </tr>
     );
@@ -196,191 +181,11 @@ function WordRow({
       <td>{word.transcription}</td>
       <td><Link to={`/card/${word.id}`}>Перейти</Link></td>
       <td>
-        <button onClick={() => startEditing(word)}>Редактировать</button>
-        <button onClick={() => deleteWord(word.id)}>Удалить</button>
+        <button className="edit-button" onClick={() => startEditing(word)}>Редактировать</button>
+        <button className="delete-button" onClick={() => deleteWord(word.id)}>Удалить</button>
       </td>
     </tr>
   );
 }
 
 export default WordList;
-
-
-
-
-
-
-/* const initialWords = [
-    { id: 1, word: 'apple', translation: 'яблоко' },
-    { id: 2, word: 'book', translation: 'книга' },
-    { id: 3, word: 'sun', translation: 'солнце' },
-];
-
-function WordList() {
-    const [words, setWords] = useState(initialWords);
-    const [editingId, setEditingId] = useState(null);
-    const [editedWord, setEditedWord] = useState({ word: '', translation: '' });
-    const [errorMessage, setErrorMessage] = useState(''); 
-    const [isAddingNew, setIsAddingNew] = useState(false);
-
-    const startEditing = (word) => {
-    setEditingId(word.id);
-    setEditedWord({ word: word.word, translation: word.translation });
-    setIsAddingNew(false); 
-    setErrorMessage(''); 
-};
-
-    const cancelEditing = () => {
-    setEditingId(null);
-    setEditedWord({ word: '', translation: '' });
-    setIsAddingNew(false);
-    setErrorMessage('');
-    };
-
-    const saveEditing = (id) => {
-      const isWordEmpty = editedWord.word.trim() === '';
-      const isTranslationEmpty = editedWord.translation.trim() === '';
-  
-      if (isWordEmpty || isTranslationEmpty) {
-        setErrorMessage('❌ Пожалуйста, заполните все поля перед сохранением.');
-        return; 
-      } 
-      if (isAddingNew) {
-        const newId = Math.max(...words.map(w => w.id)) + 1;
-        const newWord = { id: newId, ...editedWord };
-        setWords([...words, newWord]);
-        console.log('✅ Новое слово добавлено:', newWord);
-      } else {
-        const updatedWords = words.map(w =>
-          w.id === id ? { ...w, ...editedWord } : w
-        );
-        setWords(updatedWords);
-        console.log('✅ Слово обновлено:', editedWord);
-      }
-
-      cancelEditing();
-    }; 
-
-    const deleteWord = (id) => {
-    setWords(words.filter(w => w.id !== id));
-    };
-
-    const startCreating = () => {
-      setIsAddingNew(true);
-      setEditingId(null);
-      setEditedWord({ word: '', translation: '' });
-      setErrorMessage('');
-    };
-
-    return (
-        <div className="word-list">
-            <h2>Список слов</h2>
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <button className="add-button" onClick={startCreating}>➕ Добавить слово</button> 
-            <table>
-                <thead>
-                <tr>
-                    <th>Слово</th>
-                    <th>Перевод</th>
-                    <th>Карточка</th>
-                    <th>Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {words.map((word) => (
-                        <WordRow
-                            key={word.id}
-                            word={word}
-                            editingId={editingId}
-                            editedWord={editedWord}
-                            startEditing={startEditing}
-                            cancelEditing={cancelEditing}
-                            saveEditing={saveEditing}
-                            deleteWord={deleteWord}
-                            setEditedWord={setEditedWord}
-                            isEditing={editingId === word.id}
-                            />
-                        ))}
-                        {isAddingNew && (
-                          <WordRow
-                            word={{ id: null, word: '', translation: '' }}
-                            editingId={null}
-                            editedWord={editedWord}
-                            startEditing={startEditing}
-                            cancelEditing={cancelEditing}
-                            saveEditing={saveEditing}
-                            deleteWord={deleteWord}
-                            setEditedWord={setEditedWord}
-                            isEditing={true}
-                            isNew={true}
-                          />
-                        )}
-                </tbody>
-            </table>
-        </div>
-    );
-}
-
-function WordRow({
-  word,
-  editedWord,
-  isEditing,
-  startEditing,
-  cancelEditing,
-  saveEditing,
-  deleteWord,
-  setEditedWord,
-  isNew = false
-}) {
-  const isWordEmpty = editedWord.word.trim() === '';
-  const isTranslationEmpty = editedWord.translation.trim() === '';
-
-  if (isEditing) {
-    return (
-      <tr>
-        <td>
-          <input
-            type="text"
-            value={editedWord.word}
-            onChange={(e) =>
-              setEditedWord({ ...editedWord, word: e.target.value })
-            }
-            className={isWordEmpty ? 'input-error' : ''}
-          />
-        </td>
-        <td>
-          <input
-            type="text"
-            value={editedWord.translation}
-            onChange={(e) =>
-              setEditedWord({ ...editedWord, translation: e.target.value })
-            }
-            className={isTranslationEmpty ? 'input-error' : ''}
-          />
-        </td>
-        <td>
-          {!isNew && <Link to={`/card/${word.id}`}>Перейти</Link>}
-        </td>
-        <td>
-          <button onClick={() => saveEditing(word.id)}>Сохранить</button>
-          <button onClick={cancelEditing}>Отмена</button>
-        </td>
-      </tr>
-    );
-  }
-  return (
-    <tr>
-      <td><strong>{word.word}</strong></td>
-      <td>{word.translation}</td>
-      <td>
-        <Link to={`/card/${word.id}`}>Перейти</Link>
-      </td>
-      <td>
-        <button onClick={() => startEditing(word)}>Редактировать</button>
-        <button onClick={() => deleteWord(word.id)}>Удалить</button>
-      </td>
-    </tr>
-  );
-}
-
-export default WordList; */ 
