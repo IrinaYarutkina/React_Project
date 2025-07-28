@@ -5,22 +5,31 @@ import Card from './Components/Card';
 import WordList from './Components/WordList';
 import Footer from './Components/Footer';
 import NotFound from './Components/NotFound';
-import { WordsProvider } from './Context/WordsContext'
+import WordsProvider from './Context/WordsContext';
 import './App.css';
 
 function AppContent() {
-  const [learnedCount, setLearnedCount] = useState(0);
-  const location = useLocation();
+  const [learnedWordsSet, setLearnedWordsSet] = useState(new Set());
+  const location = useLocation(); 
 
-  const incrementLearnedCount = () => {
-    setLearnedCount(prev => prev + 1);
-  };
+  const incrementLearnedCount = (wordId) => {
+    setLearnedWordsSet(prevSet => {
+      if (prevSet.has(wordId)) return prevSet; // уже есть, не меняем
+      const newSet = new Set(prevSet);
+      newSet.add(wordId);
+      return newSet;
+    });
+  }; 
+
 //обнуление счетчика
   useEffect(() => {
     if (location.pathname === '/card/1') {
-      setLearnedCount(0);
+      setLearnedWordsSet(new Set());
     }
-  }, [location.pathname]);
+  }, [location.pathname]); 
+
+  const learnedCount = learnedWordsSet.size;
+  
   return (
     <div className="App">
       <Header />

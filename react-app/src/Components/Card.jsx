@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import ErrorMessage from './ErrorMessage'; 
 import { WordsContext } from '../Context/WordsContext';
 import '../Card.css';
 
@@ -36,7 +37,7 @@ function Card({ onViewTranslation, learnedCount }) {
       </div>
     ); 
   }
-  if (error) return <p>Ошибка: {error}</p>; 
+  if (error) return <ErrorMessage message={error} />; 
   const word = words.find((w) => w.id === currentId);
   
   if (!word) {
@@ -46,7 +47,7 @@ function Card({ onViewTranslation, learnedCount }) {
 
   const handleShowTranslation = () => {
     if (!viewed && onViewTranslation) {
-      onViewTranslation();
+      onViewTranslation(word.id); 
       setViewed(true);
     }
     setShowTranslation(true);

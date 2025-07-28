@@ -25,17 +25,19 @@ function Header(){
                 <h1 className="site-title">Словарь</h1>
             </div>
             <nav className="nav-buttons">
-            <button 
-                    onClick={handleCardsClick}
-                    className="nav-link"
-                > Главная 
-                </button>
-                <button 
-                    onClick={handleCardsClick}
-                    className="nav-link"
-                > Карточки
-                </button>          
-            </nav>
+        <button 
+          onClick={() => navigate('/')}
+          className="nav-link"
+        >
+          Главная
+        </button>
+        <button 
+          onClick={handleCardsClick} 
+          className="nav-link"
+        >
+          Карточки
+        </button>          
+      </nav>
         </header>
         );
 }

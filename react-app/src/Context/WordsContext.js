@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import * as wordsApi from '../Api/wordApi';
 
 export const WordsContext = createContext();
 
@@ -7,88 +8,63 @@ export function WordsProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const apiBase = 'http://itgirlschool.justmakeit.ru/api/words';
-
-  // Загрузка слов
-    const fetchWords = async () => {
+    const loadWords = async () => {
         setLoading(true);
         try {
-            const response = await fetch(apiBase);
-            if (!response.ok) throw new Error('Ошибка при получении слов');
-            const data = await response.json();
-            
-            const normalizedData = data.map(word => ({
-                ...word,
-                id: parseInt(word.id, 10), 
-            }));
-
-            setWords(normalizedData);
-            setError(null);
+        const data = await wordsApi.fetchWords();
+        setWords(data);
+        setError(null);
         } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    }; 
-        
-  // Добавление слова
+        setError(err.message);
+    } finally {
+        setLoading(false);
+    }
+    };
+
     const addWord = async (newWord) => {
     try {
-        const response = await fetch(`${apiBase}/add`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newWord),
-        });
-        if (!response.ok) throw new Error('Ошибка при добавлении слова');
-        await fetchWords(); // Перезагрузка списка
+        await wordsApi.addWord(newWord);
+        await loadWords();
     } catch (err) {
         setError(err.message);
     }
-};
+    };
 
-
-  // Обновление слова
-  const updateWord = async (updatedWord) => {
+    const updateWord = async (updatedWord) => {
     try {
-        const response = await fetch(`${apiBase}/${updatedWord.id}/update`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedWord),
-        });
-        if (!response.ok) throw new Error('Ошибка при обновлении слова');
-        await fetchWords(); // Перезагрузка списка
+        await wordsApi.updateWord(updatedWord);
+        await loadWords();
     } catch (err) {
         setError(err.message);
     }
-};
+    };
 
-  // Удаление слова
     const deleteWord = async (id) => {
     try {
-        const response = await fetch(`${apiBase}/${id}/delete`, {
-            method: 'POST',
-        });
-        if (!response.ok) throw new Error('Ошибка при удалении слова');
-        setWords(prev => prev.filter(w => w.id !== id));
+        await wordsApi.deleteWord(id);
+        await loadWords();
     } catch (err) {
         setError(err.message);
     }
-};
+    };
 
     useEffect(() => {
-    fetchWords();
+        loadWords();
     }, []);
 
     return (
         <WordsContext.Provider value={{
-            words,
-            loading,
-            error,
-            addWord,
-            updateWord,
-            deleteWord
-        }}>
-            {children}
+        words,
+        loading,
+        error,
+        loadWords, 
+        addWord,
+        updateWord,
+        deleteWord,
+    }}>
+        {children}
         </WordsContext.Provider>
     );
 }
+
+export default WordsProvider; 
