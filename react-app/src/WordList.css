@@ -1,3 +1,4 @@
+/* Страница */
 .word-list {
     background-color: #FFFAC4; 
     padding: 40px;
@@ -6,36 +7,14 @@
     min-height: 100vh;
 }
 
+/* Заголовок */
 .word-list h2 {
     color: #FF8BCB; 
     font-size: 28px;
     margin-bottom: 20px;
 }
 
-.word-list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.word-list li {
-    padding: 15px;
-    margin-bottom: 12px;
-    border: 1px solid #E0E0E0; 
-    border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.word-list li strong {
-    color: #333333;
-    font-weight: 600;
-    margin-right: 8px;
-}
-
+/* Кнопка перейти */ 
 .word-list a {
     text-decoration: none;
     background-color: #FF8BCB;
@@ -49,6 +28,8 @@
 .word-list a:hover {
     background-color: #e06fad;
 }
+
+/* Таблица */ 
 .word-list table {
     width: 100%;
     border-collapse: collapse;
@@ -64,48 +45,113 @@
     text-align: center;
     color: #ffffff;
 }
-.word-list-button {
-    background-color: #FF8BCB;
-    color: #ffffff;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    margin-right: 8px;
-    transition: background-color 0.3s;
-}
 
-.word-list-button:hover {
-    background-color: #e573b0;
-}
-
-.word-list-button-delete{
-    background-color: #fdf6a6;
+/* Кнопка добавить слово */
+.add-button {
+    background-color: #FFFAC4;
     color: #333333;
     padding: 8px 16px;
-    border-color: #e573b0;
     border-radius: 8px;
-    font-size: 14px;
+    border: solid 2px #FF8BCB;
+    font-size: 16px;
     cursor: pointer;
     margin-right: 8px;
     transition: background-color 0.3s;
 }
 
+.add-button:hover{
+    background-color: #ffe77a;
+}
+
+.word-list input[type="text"] {
+    padding: 6px 10px;
+    font-size: 12px;
+    border: 1px solid #FF8BCB;
+    border-radius: 8px;
+    background-color: #ffffff;
+    transition: border-color 0.3s;
+}
+
+.word-list input[type="text"]:focus {
+    border-color: #FF8BCB;
+    outline: none;
+}
+
+/* Ошибка при незаполненных полях */
 .input-error {
     border: 2px solid #e573b0;
     outline: none;
 }
-
+/* Сообщение об ошибке */
 .error-message {
     color: #333333;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-.add-button {
-    margin-bottom: 10px;
-    padding: 6px 12px;
-    font-size: 16px;
-    cursor: pointer;
+/* Кнопка редактирования */
+.edit-button {
+    background-color: #FF8BCB;
+    color: #ffffff;
+    padding: 8px 4px;
+    margin-right: 4px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    
+}
+.edit-button:hover{
+    background-color: #e06fad;
+} 
+
+/* Кнопка удаления */
+.delete-button{
+    background-color: #FF8BCB;
+    color: #ffffff;
+    padding: 8px 4px;
+    border: none;
+    margin-left: 4px;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover{
+    background-color: #e06fad;
+}
+/* Кнопка сохранить */
+.save-word-button{
+    background-color: #FF8BCB;
+    color: #ffffff;
+    padding: 8px 14px;
+    margin-right: 2px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+.save-word-button:hover{
+    background-color: #ffe77a;
+    border: 2px solid #e473b2; 
+    color: #333;; 
+}
+
+/* Кнопка отмена */
+.cancel-word-button{
+    background-color: #FF8BCB;
+    color: #ffffff;
+    padding: 8px 14px;
+    margin-left: 4px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+.cancel-word-button:hover{
+    background-color: #ffe77a;
+    border: 2px solid #e473b2; 
+    color: #333;; 
 }

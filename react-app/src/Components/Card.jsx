@@ -1,72 +1,84 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { useStores } from '../stores/StoreContext';
 import '../Card.css';
 
-const words = [
-  { id: 1, word: 'apple', translation: 'яблоко' },
-  { id: 2, word: 'book', translation: 'книга' },
-  { id: 3, word: 'sun', translation: 'солнце' },
-];
+const Card = observer(({ onViewTranslation, learnedCount }) => {
+  const { wordStore } = useStores();
+  if (!wordStore) return <div>Ошибка загрузки данных</div>;
+  const { words = [], loading, error } = wordStore;
 
-function Card({ onViewTranslation, learnedCount}) {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // id из строки в число
   const currentId = parseInt(id, 10);
-  const word = words.find(w => w.id === currentId);
   const [showTranslation, setShowTranslation] = useState(false);
   const [viewed, setViewed] = useState(false);
-  const showTranslationBtnRef = useRef(null); 
+  const showTranslationBtnRef = useRef(null);
 
   useEffect(() => {
-    // скрывается перевод при смене слова
     setShowTranslation(false);
     setViewed(false);
-    // автофокус на кнопке "показать перевод"
     if (showTranslationBtnRef.current) {
       showTranslationBtnRef.current.focus();
     }
   }, [id]);
 
+  if (loading || !Array.isArray(words) || words.length === 0) {
+    return (
+      <div id="loadingText"> 
+        {'Загрузка'.split('').map((char, i) => (
+          <div key={i} id={`loadingText_${i + 1}`} className="loadingText">
+            {char}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (error) return <p>Ошибка: {error}</p>;
+
+  const word = words.find((w) => w.id === currentId);
+
   if (!word) {
+    console.log('❌ Слово не найдено. currentId:', currentId, 'Список слов:', words);
     return <div>Слово не найдено</div>;
   }
+
   const handleShowTranslation = () => {
     if (!viewed && onViewTranslation) {
-      onViewTranslation(); // увеличиваем счётчик
+      onViewTranslation();
       setViewed(true);
     }
     setShowTranslation(true);
   };
 
-  // переход по словам
-  const goPrev = () => {
-    const prevId = currentId === words[0].id ? words[words.length - 1].id : currentId - 1;
-    navigate(`/card/${prevId}`);
+  const getPrevId = () => {
+    const currentIndex = words.findIndex((w) => w.id === currentId);
+    return currentIndex === 0 ? words[words.length - 1].id : words[currentIndex - 1].id;
   };
 
-  const goNext = () => {
-    const nextId = currentId === words[words.length - 1].id ? words[0].id : currentId + 1;
-    navigate(`/card/${nextId}`);
+  const getNextId = () => {
+    const currentIndex = words.findIndex((w) => w.id === currentId);
+    return currentIndex === words.length - 1 ? words[0].id : words[currentIndex + 1].id;
   };
 
   return (
     <div>
-      {/* Кнопки вне карточки */}
       <div style={{ display: 'flex', justifyContent: 'space-between', maxWidth: '420px', margin: '20px auto' }}>
-        <button className="word-list-button" onClick={goPrev}>← Назад</button>
-        <button className="word-list-button" onClick={goNext}>Вперед →</button>
+        <button className="word-list-button" onClick={() => navigate(`/card/${getPrevId()}`)}>← Назад</button>
+        <button className="word-list-button" onClick={() => navigate(`/card/${getNextId()}`)}>Вперед →</button>
       </div>
 
-      {/* Карточка слова */}
       <div className="word-card">
         <div className="card-content">
-          <p className="english-word"><strong>Слово:</strong> {word.word}</p>
+          <p className="english-word"><strong>Слово:</strong> {word.english}</p>
+          <p><strong>Транскрипция:</strong> {word.transcription}</p>
 
           {!showTranslation ? (
             <button
-            ref={showTranslationBtnRef} 
+              ref={showTranslationBtnRef}
               className="word-list-button"
               onClick={handleShowTranslation}
             >
@@ -74,7 +86,7 @@ function Card({ onViewTranslation, learnedCount}) {
             </button>
           ) : (
             <>
-              <p className="translation"><strong>Перевод:</strong> {word.translation}</p>
+              <p className="translation"><strong>Перевод:</strong> {word.russian}</p>
               <button
                 className="word-list-button"
                 onClick={() => setShowTranslation(false)}
@@ -84,7 +96,7 @@ function Card({ onViewTranslation, learnedCount}) {
               </button>
             </>
           )}
-          {/* Счетчик */}
+
           <p style={{ marginTop: '20px', fontStyle: 'italic' }}>
             Изучено слов за тренировку: {learnedCount}
           </p>
@@ -92,6 +104,6 @@ function Card({ onViewTranslation, learnedCount}) {
       </div>
     </div>
   );
-}
+});
 
 export default Card;

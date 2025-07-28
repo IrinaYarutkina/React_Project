@@ -5,9 +5,11 @@ import Card from './Components/Card';
 import WordList from './Components/WordList';
 import Footer from './Components/Footer';
 import NotFound from './Components/NotFound';
+import { StoreProvider, useStores } from './stores/StoreContext'; 
 import './App.css';
 
 function AppContent() {
+  const { wordStore } = useStores();  
   const [learnedCount, setLearnedCount] = useState(0);
   const location = useLocation();
 
@@ -16,10 +18,15 @@ function AppContent() {
   };
 //обнуление счетчика
   useEffect(() => {
-    if (location.pathname === '/card/1') {
-      setLearnedCount(0);
-    }
-  }, [location.pathname]);
+  wordStore.fetchWords();
+  }, [wordStore]);
+
+  useEffect(() => {
+  if (location.pathname === '/card/1') {
+    setLearnedCount(0);
+  }
+}, [location.pathname]);
+
   return (
     <div className="App">
       <Header />
@@ -43,7 +50,9 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
+      <StoreProvider>  
+      <AppContent /> 
+      </StoreProvider> 
     </Router>
   );
 }
