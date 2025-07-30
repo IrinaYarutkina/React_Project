@@ -6,9 +6,11 @@ import WordList from './Components/WordList';
 import Footer from './Components/Footer';
 import NotFound from './Components/NotFound';
 import { StoreProvider, useStores } from './stores/StoreContext'; 
+import { observer } from 'mobx-react-lite';               
+import { themeStore } from './stores/themeStore';  
 import './App.css';
 
-function AppContent() {
+const AppContent = observer(() => { 
   const { wordStore } = useStores();  
   const [learnedWordsSet, setLearnedWordsSet] = useState(new Set());
   const location = useLocation();
@@ -21,9 +23,10 @@ function AppContent() {
       return newSet;
     });
   };
-//обнуление счетчика
+
+  // Обнуление счётчика при переходе на первую карточку
   useEffect(() => {
-  wordStore.fetchWords();
+    wordStore.fetchWords();
   }, [wordStore]);
 
   useEffect(() => {
@@ -31,18 +34,24 @@ function AppContent() {
       setLearnedWordsSet(new Set());
     }
   }, [location.pathname]);
+
   const learnedCount = learnedWordsSet.size;
 
   return (
-    <div className="App">
+    <div className={`App ${themeStore.theme === 'dark' ? 'dark-theme' : 'light-theme'}`}> 
       <Header />
+      <button onClick={() => themeStore.toggleTheme()} style={{ position: 'absolute', top: 10, right: 10 }}>
+        Сменить тему
+      </button> 
       <Routes>
         <Route path="/" element={<WordList />} />
         <Route path="/words" element={<WordList />} />
         <Route
           path="/card/:id"
           element={
-            <Card onViewTranslation={incrementLearnedCount} learnedCount={learnedCount}
+            <Card 
+              onViewTranslation={incrementLearnedCount} 
+              learnedCount={learnedCount}
             />
           }
         />
@@ -51,17 +60,16 @@ function AppContent() {
       <Footer />
     </div>
   );
-}
+});
 
 function App() {
   return (
     <Router>
       <StoreProvider>  
-      <AppContent /> 
+        <AppContent /> 
       </StoreProvider> 
     </Router>
   );
 }
 
 export default App;
-

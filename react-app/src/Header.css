@@ -42,11 +42,32 @@
     border-radius: 8px;
     font-weight: 500;
     border: none;
-
     transition: background-color 0.2s ease;
 }
 
 .nav-link:hover {
     background-color: #ffe77a;
     border: 2px solid #e473b2; 
+}
+
+/* Темная тема */
+[data-theme='dark'] .app-header{
+    background-color: #2C2B3C;
+    box-shadow: 1px 0 5px 0.5px #E0D7FF;
+}
+
+[data-theme='dark'] .site-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #E0D7FF;
+}
+
+[data-theme='dark'] .nav-link {
+    background-color: #5C4BD8;
+    color: #E0D7FF;
+}
+
+[data-theme='dark'] .nav-link:hover {
+    background-color: #7B6FFF;
+    border: 2px solid #FFFAC4;
 }

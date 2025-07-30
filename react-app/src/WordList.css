@@ -10,7 +10,7 @@
 /* Заголовок */
 .word-list h2 {
     color: #FF8BCB; 
-    font-size: 28px;
+    font-size: 34px;
     margin-bottom: 20px;
 }
 
@@ -83,10 +83,16 @@
     outline: none;
 }
 /* Сообщение об ошибке */
-.error-message {
-    color: #333333;
+.field-error-message{ 
+    padding: 30px 16px;
+    margin: 20px 0;
+    background-color: #FFE1EC;
+    border-left: 5px solid #8B0037;
+    border-right: 5px solid #8B0037;
+    color: #8B0037;
     font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 24px;
+    border-radius: 8px;
 }
 
 /* Кнопка редактирования */
@@ -153,5 +159,89 @@
 .cancel-word-button:hover{
     background-color: #ffe77a;
     border: 2px solid #e473b2; 
-    color: #333;; 
+    color: #333;
+    background-color: #2C2B3C; 
 }
+
+
+/* Темная тема */
+
+/* Страница */
+[data-theme='dark'] .word-list {
+    background-color: #2C2B3C; 
+    color: #E0D7FF;
+} 
+/* Заголовок */
+[data-theme='dark'] .word-list h2 {
+    color: #E0D7FF;
+}
+/* Кнопка перейти */  
+[data-theme='dark'] .word-list a {
+    background-color: #7B6FFF; 
+    color: #FFFAC4; 
+}
+[data-theme='dark'] .word-list a:hover {
+    background-color: #5C4BD8; 
+} 
+/* Таблица */ 
+[data-theme='dark'] .word-list table {
+    background-color: transparent;
+} 
+[data-theme='dark'] .word-list th,
+[data-theme='dark'] .word-list td {
+    border: 1px solid #7B6FFF; 
+} 
+[data-theme='dark'] .word-list th {
+    background-color: #7B6FFF;
+    color: #E0D7FF;
+} 
+
+/* Кнопка добавить слово */
+[data-theme='dark'] .add-button {
+    background-color: transparent; 
+    color: #E0D7FF;
+    border: 2px solid #7B6FFF; 
+} 
+
+[data-theme='dark'] .add-button:hover {
+    background-color: #5C4BD8; 
+}
+
+/* форма для добавления слова */
+[data-theme='dark'] .word-list input[type="text"] {
+    background-color: #403e56; 
+    color: #E0D7FF;
+    border: 1px solid #E0D7FF; 
+}
+
+[data-theme='dark'] .input-error{
+    border: 2px solid #ffffff;
+}
+
+[data-theme='dark'] .field-error-message{ 
+    background-color: #403e56;   
+    border: 1px solid #E0D7FF;
+    border-left: 5px solid #E0D7FF;
+    border-right: 5px solid #E0D7FF;
+    color: #E0D7FF; 
+}
+
+/* Кнопки редактирования, удаления, сохранения и отмены */ 
+[data-theme='dark'] .edit-button,
+[data-theme='dark'] .delete-button,
+[data-theme='dark'] .save-word-button,
+[data-theme='dark'] .cancel-word-button {
+    background-color: #7B6FFF; 
+    color: #E0D7FF; 
+}
+
+[data-theme='dark'] .edit-button:hover,
+[data-theme='dark'] .delete-button:hover {
+    background-color: #5C4BD8; 
+}
+[data-theme='dark'] .save-word-button:hover,
+[data-theme='dark'] .cancel-word-button:hover {
+    background-color: #5C4BD8; 
+    border: 2px solid #E0D7FF; 
+    color: #FFFAC4;
+} 

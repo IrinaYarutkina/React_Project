@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useStores } from '../stores/StoreContext';
 import { observer } from 'mobx-react-lite';
+import { themeStore } from '../stores/themeStore';
 import '../Header.css';
 import logo from '../assets/logo.png';  
 
@@ -17,6 +18,11 @@ import logo from '../assets/logo.png';
         <h1 className="site-title">Словарь</h1>
       </div>
       <nav className="nav-buttons">
+      <button onClick={() => themeStore.toggleTheme()}
+          className="nav-link"
+        >
+          {themeStore.theme === 'light' ? '🌙 Тёмная' : '☀️ Светлая'}
+      </button>
         <button 
           onClick={() => navigate('/')}
           className="nav-link"

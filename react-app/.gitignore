@@ -1,0 +1,21 @@
+# Node modules
+node_modules/
+
+# Кэш
+.cache/
+dist/
+build/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# ESLint cache
+.eslintcache
+
+# Webpack/Vite/Babel cache
+node_modules/.cache/
+
+# macOS
+.DS_Store

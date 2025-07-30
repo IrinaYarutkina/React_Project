@@ -78,10 +78,10 @@ const WordList = observer(() => {
   return (
     <div className="word-list">
       <h2>Список слов</h2>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <button className="add-button" onClick={startCreating}>
-        ➕ Добавить слово
+        + Добавить слово
       </button>
+      {errorMessage && <p className="field-error-message">{errorMessage}</p>}
       <table>
         <thead>
           <tr>
