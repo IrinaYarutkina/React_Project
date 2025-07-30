@@ -48,7 +48,7 @@ const Card = observer(({ onViewTranslation, learnedCount }) => {
 
   const handleShowTranslation = () => {
     if (!viewed && onViewTranslation) {
-      onViewTranslation();
+      onViewTranslation(word.id); // чтобы счетчик не повторялся
       setViewed(true);
     }
     setShowTranslation(true);

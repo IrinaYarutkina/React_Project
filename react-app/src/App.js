@@ -10,11 +10,16 @@ import './App.css';
 
 function AppContent() {
   const { wordStore } = useStores();  
-  const [learnedCount, setLearnedCount] = useState(0);
+  const [learnedWordsSet, setLearnedWordsSet] = useState(new Set());
   const location = useLocation();
 
-  const incrementLearnedCount = () => {
-    setLearnedCount(prev => prev + 1);
+  const incrementLearnedCount = (wordId) => {
+    setLearnedWordsSet(prevSet => {
+      if (prevSet.has(wordId)) return prevSet; 
+      const newSet = new Set(prevSet);
+      newSet.add(wordId);
+      return newSet;
+    });
   };
 //обнуление счетчика
   useEffect(() => {
@@ -22,10 +27,11 @@ function AppContent() {
   }, [wordStore]);
 
   useEffect(() => {
-  if (location.pathname === '/card/1') {
-    setLearnedCount(0);
-  }
-}, [location.pathname]);
+    if (location.pathname === '/card/1') {
+      setLearnedWordsSet(new Set());
+    }
+  }, [location.pathname]);
+  const learnedCount = learnedWordsSet.size;
 
   return (
     <div className="App">
